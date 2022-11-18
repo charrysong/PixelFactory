@@ -8,8 +8,10 @@
     </view>
   </scroll-view>
 </view>
+<button type="default" style='margin-top:10px;margin-left:10px;' size='mini' bindtap="clearboard" style="border:1px solid #{{isClear?'f80':''}}" hover-class="other-button-hover"> 橡皮擦 </button>
 <button type="default" style='margin-top:10px;margin-left:10px;' size='mini' bindtap="undoTouchAction" hover-class="other-button-hover"> 撤销 </button>
 <button type="default" style='margin-top:10px;margin-left:10px;' size='mini' bindtap="restoreTouchAction" hover-class="other-button-hover"> 恢复 </button>
+
 
 <button type="default" style='margin-top:10px;margin-left:10px;' size='mini' bindtap="loadInPhotoAlbumAction" hover-class="other-button-hover"> 导入相册 </button>
 <button type="default" style='margin-top:10px;margin-left:10px;' size='mini' bindtap="saveToPhotoAlbumAction" hover-class="other-button-hover"> 保存相册 </button>
