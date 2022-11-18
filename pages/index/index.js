@@ -9,8 +9,8 @@ let step = -1;
 let touchX = 0;
 let touchY = 0;
 let pixelWH = 0;
-let curColor = '#FFFFFF';
-let pickerColors = ['#FFFFFF', '#000000', 'yellow', 'red', 'green', 'gray', '#F0F8FF', '#FAEBD7', '#00FFFF', '#7FFFD4', '#F0FFFF'];
+let curColor = '#ff8800';
+let pickerColors = ['#ff8800', '#000000', 'yellow', 'red', 'green', 'gray', '#F0F8FF', '#FAEBD7', '#00FFFF', '#7FFFD4', '#F0FFFF'];
 let canvasHistory = [];
 
 let canvasHeight = 0;
@@ -25,7 +25,8 @@ Page({
   data: {
     curColorIndex:0,
     canvasHeight: 0,
-    colors: []
+    colors: [],
+    isClear:false,
   },
   /**
    * 生命周期函数--监听页面加载
@@ -41,22 +42,22 @@ Page({
     wx.getSystemInfo({
       success: function (res) {
         screenW = res.screenWidth;
-        var rectWH = (screenW / 16);
+        var rectWH = (screenW / 32);
         pixelWH = rectWH;
         canvasHeight = screenW;
         that.setData({ canvasHeight: screenW })
 
         // 使用 wx.createContext 获取绘图上下文 context
-        context.setFillStyle('black');
+        context.setFillStyle('#ffffff');
         context.fillRect(0, 0, screenW, screenW);
 
         context.setLineWidth(0.5);
-        context.setStrokeStyle('rgba(255, 255, 255, 0.5)');
-        for (var i = 0; i <= 16; i++) {
+        context.setStrokeStyle('#000000');
+        for (var i = 0; i <= 32; i++) {
           context.moveTo(0, i * rectWH);
           context.lineTo(screenW, i * rectWH);
         }
-        for (var i = 0; i <= 16; i++) {
+        for (var i = 0; i <= 32; i++) {
           context.moveTo(i * rectWH, 0);
           context.lineTo(i * rectWH, screenW);
         }
@@ -75,7 +76,7 @@ Page({
     if (touchX > screenW || touchY > screenW){
       return;
     }
-    drawPixel(touchX,touchY);
+    drawPixel(touchX,touchY,this);
   },
 
   //绘制过程中
@@ -85,7 +86,7 @@ Page({
     if (touchX > screenW || touchY > screenW) {
       return;
     }
-    drawPixel(touchX, touchY);
+    drawPixel(touchX, touchY,this);
   },
   //绘制结束
   touchEnd:function(e){
@@ -107,6 +108,9 @@ Page({
     var idx = parseInt(e.target.id);
     this.setData({ curColorIndex:idx });
     curColor = pickerColors[idx];
+  },
+  clearboard:function(){
+    this.setData({isClear:!this.data.isClear});
   },
 
   //保存到相册
@@ -207,10 +211,19 @@ function restore(){
 }
 
 //绘制像素点
-function drawPixel(x, y){
+function drawPixel(x, y,that){
   var px = x < pixelWH ? 0 : parseInt(x / pixelWH) * pixelWH;
   var py = y < pixelWH ? 0 : parseInt(y / pixelWH) * pixelWH;
-  context.setFillStyle(curColor);
-  context.fillRect(px, py, pixelWH, pixelWH);
-  context.draw(true);
+  if(that.data.isClear){
+    context.setFillStyle("#ffffff");
+    context.fillRect(px+1, py+1, pixelWH-2, pixelWH-2);
+    context.draw(true);
+  }
+  else{
+    context.setFillStyle(curColor);
+    context.fillRect(px+1, py+1, pixelWH-2, pixelWH-2);
+    context.draw(true);
+  }
+  
+  
 }
